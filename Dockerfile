@@ -2,18 +2,16 @@ FROM centos/systemd
 
 MAINTAINER Niu Zhenyong <niuzhenyong@qq.com>
 
-RUN cd /tmp && \
-    curl -O http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jre-8u161-linux-x64.rpm && \
-    yum install -y ./jre-8u161-linux-x64.rpm && \
-    yum clean all && \
-    rm /tmp/jre-8u161-linux-x64.rpm
-
 ENV JAVA_HOME=/usr/java/default
 ENV RUN_AS_USER=collabnet
 
 RUN useradd collabnet && \
     cd /tmp && \
-    curl -O https://downloads-guests.open.collab.net/files/documents/61/18759/CollabNetSubversionEdge-5.2.2_linux-x86_64.tar.gz && \
+    curl -O -H "Cookie: oraclelicense=accept-securebackup-cookie" -H "Connection: keep-alive" -L "http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jre-8u161-linux-x64.rpm" && \
+    yum install -y ./jre-8u161-linux-x64.rpm && \
+    yum clean all && \
+    rm ./jre-8u161-linux-x64.rpm && \
+    curl -O -H "Connection: keep-alive" -L "https://downloads-guests.open.collab.net/files/documents/61/18759/CollabNetSubversionEdge-5.2.2_linux-x86_64.tar.gz" && \
     cd /opt && \
     tar zxf /tmp/CollabNetSubversionEdge-5.2.2_linux-x86_64.tar.gz && \
     rm /tmp/CollabNetSubversionEdge-5.2.2_linux-x86_64.tar.gz && \
@@ -29,7 +27,6 @@ RUN useradd collabnet && \
     echo "if [ ! -f /opt/csvn/data/conf/csvn.conf ]; then" >> ~/init_data.sh && \
     echo "    cp -a /opt/csvn/data_init/* /opt/csvn/data" >> ~/init_data.sh && \
     echo "    chown -R collabnet.collabnet /opt/csvn/data" >> ~/init_data.sh && \
-    echo "    touch /root/ok.txt" >> ~/init_data.sh && \
     echo "fi" >> ~/init_data.sh && \
     chmod +x ~/init_data.sh && \
     echo "[Unit]" >> /etc/systemd/system/csvn-data-init.service && \
