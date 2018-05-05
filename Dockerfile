@@ -1,6 +1,6 @@
 FROM centos/systemd
 
-MAINTAINER Niu Zhenyong <niuzhenyong@qq.com>
+LABEL maintainer Niu Zhenyong <niuzhenyong@qq.com>
 
 ENV JAVA_HOME=/usr/java/default
 ENV RUN_AS_USER=collabnet
